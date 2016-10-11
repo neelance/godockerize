@@ -101,9 +101,17 @@ func doBuild(c *cli.Context) error {
 
 	var dockerfile bytes.Buffer
 	fmt.Fprintf(&dockerfile, "  FROM %s\n", c.String("base"))
+
+	for _, pkg := range install {
+		if strings.HasSuffix(pkg, "@edge") {
+			fmt.Fprintf(&dockerfile, "  RUN echo -e \"@edge http://dl-cdn.alpinelinux.org/alpine/edge/main\\n@edge http://dl-cdn.alpinelinux.org/alpine/edge/community\" >> /etc/apk/repositories\n")
+			break
+		}
+	}
 	if len(install) != 0 {
 		fmt.Fprintf(&dockerfile, "  RUN apk add --no-cache %s\n", strings.Join(sortedStringSet(install), " "))
 	}
+
 	for _, cmd := range run {
 		fmt.Fprintf(&dockerfile, "  RUN %s\n", cmd)
 	}
