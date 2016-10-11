@@ -146,7 +146,12 @@ func doBuild(c *cli.Context) error {
 	}
 
 	fmt.Println("godockerize: Building Docker image...")
-	cmd = exec.Command("docker", "build", "-t", c.String("tag"), ".")
+	dockerArgs := []string{"build"}
+	if tag := c.String("tag"); tag != "" {
+		dockerArgs = append(dockerArgs, "-t", tag)
+	}
+	dockerArgs = append(dockerArgs, ".")
+	cmd = exec.Command("docker", dockerArgs...)
 	cmd.Dir = tmpdir
 	cmd.Stdout = os.Stdout
 	cmd.Stderr = os.Stderr
