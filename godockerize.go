@@ -73,7 +73,7 @@ func doBuild(c *cli.Context) error {
 	fset := token.NewFileSet()
 	env := []string{}
 	expose := []string{}
-	install := []string{"ca-certificates"}
+	install := []string{"ca-certificates", "mailcap"} // mailcap is for /etc/mime.types
 	run := []string{}
 	for _, name := range pkg.GoFiles {
 		f, err := parser.ParseFile(fset, filepath.Join(pkg.Dir, name), nil, parser.ParseComments)
