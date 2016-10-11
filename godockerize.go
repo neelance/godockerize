@@ -71,9 +71,10 @@ func doBuild(c *cli.Context) error {
 	binname := path.Base(pkg.ImportPath)
 
 	fset := token.NewFileSet()
-	var expose []string
-	var install []string
-	var run []string
+	env := []string{}
+	expose := []string{}
+	install := []string{"ca-certificates"}
+	run := []string{}
 	for _, name := range pkg.GoFiles {
 		f, err := parser.ParseFile(fset, filepath.Join(pkg.Dir, name), nil, parser.ParseComments)
 		if err != nil {
@@ -85,6 +86,8 @@ func doBuild(c *cli.Context) error {
 				if strings.HasPrefix(c.Text, "//docker:") {
 					parts := strings.SplitN(c.Text[9:], " ", 2)
 					switch parts[0] {
+					case "env":
+						env = append(env, strings.Fields(parts[1])...)
 					case "expose":
 						expose = append(expose, strings.Fields(parts[1])...)
 					case "install":
@@ -114,6 +117,9 @@ func doBuild(c *cli.Context) error {
 
 	for _, cmd := range run {
 		fmt.Fprintf(&dockerfile, "  RUN %s\n", cmd)
+	}
+	if len(env) != 0 {
+		fmt.Fprintf(&dockerfile, "  ENV %s\n", strings.Join(sortedStringSet(env), " "))
 	}
 	if len(expose) != 0 {
 		fmt.Fprintf(&dockerfile, "  EXPOSE %s\n", strings.Join(sortedStringSet(expose), " "))
