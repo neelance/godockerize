@@ -39,6 +39,10 @@ func main() {
 						Usage: "base Docker image name",
 						Value: "alpine:3.4",
 					},
+					&cli.BoolFlag{
+						Name:  "dry-run",
+						Usage: "only print generated Dockerfile",
+					},
 				},
 				Action: doBuild,
 			},
@@ -129,6 +133,10 @@ func doBuild(c *cli.Context) error {
 
 	fmt.Println("godockerize: Generated Dockerfile:")
 	fmt.Print(dockerfile.String())
+
+	if c.Bool("dry-run") {
+		return nil
+	}
 
 	ioutil.WriteFile(filepath.Join(tmpdir, "Dockerfile"), dockerfile.Bytes(), 0777)
 	if err != nil {
