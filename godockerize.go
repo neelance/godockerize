@@ -37,7 +37,7 @@ func main() {
 					&cli.StringFlag{
 						Name:  "base",
 						Usage: "base Docker image name",
-						Value: "alpine:3.4",
+						Value: "alpine:3.5",
 					},
 					&cli.BoolFlag{
 						Name:  "dry-run",
