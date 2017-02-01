@@ -39,6 +39,10 @@ func main() {
 						Usage: "base Docker image name",
 						Value: "alpine:3.5",
 					},
+					&cli.StringSliceFlag{
+						Name:  "env",
+						Usage: "additional environment variables for the Dockerfile",
+					},
 					&cli.BoolFlag{
 						Name:  "dry-run",
 						Usage: "only print generated Dockerfile",
@@ -75,7 +79,7 @@ func doBuild(c *cli.Context) error {
 	binname := path.Base(pkg.ImportPath)
 
 	fset := token.NewFileSet()
-	env := []string{}
+	env := c.StringSlice("env")
 	expose := []string{}
 	install := []string{"ca-certificates", "mailcap"} // mailcap is for /etc/mime.types
 	run := []string{}
