@@ -148,7 +148,7 @@ func doBuild(c *cli.Context) error {
 	}
 
 	fmt.Println("godockerize: Building Go binary...")
-	cmd := exec.Command("go", "build", "-o", binname, pkg.ImportPath)
+	cmd := exec.Command("go", "build", "-tags", "dist", "-o", binname, pkg.ImportPath)
 	cmd.Dir = tmpdir
 	cmd.Env = []string{
 		"GOARCH=amd64",
