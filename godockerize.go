@@ -132,7 +132,7 @@ func doBuild(c *cli.Context) error {
 	if len(expose) != 0 {
 		fmt.Fprintf(&dockerfile, "  EXPOSE %s\n", strings.Join(sortedStringSet(expose), " "))
 	}
-	fmt.Fprintf(&dockerfile, "  ENTRYPOINT [\"/sbin/tini\", \"-g\", \"--\", \"/usr/local/bin/%s\"]\n", binname)
+	fmt.Fprintf(&dockerfile, "  ENTRYPOINT [\"/sbin/tini\", \"--\", \"/usr/local/bin/%s\"]\n", binname)
 	fmt.Fprintf(&dockerfile, "  ADD %s /usr/local/bin/\n", binname)
 
 	fmt.Println("godockerize: Generated Dockerfile:")
