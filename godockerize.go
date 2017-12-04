@@ -22,7 +22,7 @@ func main() {
 	app := &cli.App{
 		Name:    "godockerize",
 		Usage:   "build Docker images from Go packages",
-		Version: "0.0.1",
+		Version: "0.0.2",
 		Commands: []*cli.Command{
 			{
 				Name:      "build",
@@ -37,7 +37,7 @@ func main() {
 					&cli.StringFlag{
 						Name:  "base",
 						Usage: "base Docker image name",
-						Value: "alpine:3.6",
+						Value: "alpine:3.7",
 					},
 					&cli.StringSliceFlag{
 						Name:  "env",
