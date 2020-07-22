@@ -15,7 +15,7 @@ import (
 	"sort"
 	"strings"
 
-	"gopkg.in/urfave/cli.v2"
+	"github.com/urfave/cli/v2"
 )
 
 // Alpine doesn't do point releases, but if you are reading this, 3.8 downloads
