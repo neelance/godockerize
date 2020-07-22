@@ -18,10 +18,7 @@ import (
 	"github.com/urfave/cli/v2"
 )
 
-// Alpine doesn't do point releases, but if you are reading this, 3.8 downloads
-// 3.8.1 or newer, which contains the security fix for this RCE:
-// https://justi.cz/security/2018/09/13/alpine-apk-rce.html
-const baseDockerImage = "alpine:3.8"
+const baseDockerImage = "alpine:3.12"
 
 func main() {
 	app := &cli.App{
