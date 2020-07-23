@@ -158,15 +158,12 @@ func doBuild(c *cli.Context) error {
 
 	for _, importPath := range packages {
 		fmt.Printf("godockerize: Building Go binary %s...\n", path.Base(importPath))
-		cmd := exec.Command("go", "build", "-buildmode", "exe", "-tags", "dist", "-a", "-o", path.Base(importPath), importPath)
-		cmd.Dir = tmpdir
-		cmd.Env = []string{
+		cmd := exec.Command("go", "build", "-buildmode", "exe", "-tags", "dist", "-a", "-o", filepath.Join(tmpdir, path.Base(importPath)), importPath)
+		cmd.Env = append(os.Environ(),
 			"GOARCH=amd64",
 			"GOOS=linux",
-			"GOROOT=" + build.Default.GOROOT,
-			"GOPATH=" + build.Default.GOPATH,
 			"CGO_ENABLED=0",
-		}
+		)
 		cmd.Stdout = os.Stdout
 		cmd.Stderr = os.Stderr
 		if err := cmd.Run(); err != nil {
@@ -182,6 +179,7 @@ func doBuild(c *cli.Context) error {
 	dockerArgs = append(dockerArgs, ".")
 	cmd := exec.Command("docker", dockerArgs...)
 	cmd.Dir = tmpdir
+	cmd.Env = os.Environ()
 	cmd.Stdout = os.Stdout
 	cmd.Stderr = os.Stderr
 	if err := cmd.Run(); err != nil {
